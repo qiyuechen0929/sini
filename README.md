@@ -4,6 +4,7 @@
 
 **把你和 TA 的聊天记录，变成 TA 的说话方式 —— 一个端侧优先的 AI「数字人格」聊天应用**
 
+[![Build](https://github.com/qiyuechen0929/sini/actions/workflows/ci.yml/badge.svg)](https://github.com/qiyuechen0929/sini/actions/workflows/ci.yml)
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%E2%89%A53.3-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![Platform](https://img.shields.io/badge/%E5%B9%B3%E5%8F%B0-Android%20%7C%20iOS%20%7C%20Web-lightgrey)](#)
@@ -24,6 +25,7 @@
 - [项目结构](#-项目结构)
 - [快速开始](#-快速开始)
 - [端侧模型说明](#-端侧模型说明)
+- [测试与 CI](#-测试与-ci)
 - [隐私设计](#-隐私设计)
 - [Roadmap](#-roadmap)
 - [免责声明](#-免责声明)
@@ -53,11 +55,11 @@
 
 <div align="center">
 
-| 首次进入 | 创建人格 |
-|:---:|:---:|
-| <img src="docs/screenshots/01_guide.png" width="330"> | <img src="docs/screenshots/21_create.png" width="330"> |
-| **从聊天记录创建** | **开始对话** |
-| <img src="docs/screenshots/persona_import_hub.png" width="330"> | <img src="docs/screenshots/26_chat.png" width="330"> |
+| 首次进入 | 创建人格 | 从聊天记录创建 |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/01_guide.png" width="270"> | <img src="docs/screenshots/21_create.png" width="270"> | <img src="docs/screenshots/persona_import_hub.png" width="270"> |
+| **开始对话** | **声音克隆（端侧推理）** | |
+| <img src="docs/screenshots/26_chat.png" width="270"> | <img src="docs/screenshots/70_voice_clone.png" width="270"> | |
 
 </div>
 
@@ -69,7 +71,7 @@
 
 | 能力 | 说明 |
 |---|---|
-| **聊天记录克隆** | 导入 `TXT / JSON / CSV` 聊天记录，自动分析说话风格、称呼、口头禅，生成"人格画像" |
+| **聊天记录克隆** | 导入 `TXT / JSON / CSV` 聊天记录（支持 微信 / QQ / Telegram / 通用格式），自动分析说话风格、称呼、口头禅，生成"人格画像" |
 | **四步创建向导** | 基础 → 关系 → 性格 → 维度，也支持跳过向导直接对话 |
 | **人格编辑** | 名字 / 关系 / 用你自己的话描述 TA（优先级最高，AI 严格遵循） |
 | **人格养成卡** | 把人格打包成卡片**分享 / 导入**，也可以带走去别的设备 |
@@ -96,7 +98,7 @@
 
 | 能力 | 实现 |
 |---|---|
-| **声音克隆** | `sherpa-onnx` + ZipVoice 零样本克隆，**本机推理，样本用完即弃** |
+| **声音克隆** | `sherpa-onnx` + ZipVoice 零样本克隆，**本机 CPU 推理，样本用完即弃** |
 | **流式语音识别** | 端侧 Zipformer 中英双语模型，实时转写 |
 | **系统语音输入** | `speech_to_text`（安卓/iOS 系统识别） |
 | **语音 / 视频通话界面** | 会话式语音交互 UI |
@@ -115,7 +117,7 @@
 - **Token 用量面板 + 用量小票**，随时看花了多少
 - **响应式布局**：手机端与 Web 端同一套代码
 - **端侧模型挂载**：按 platform 自动挂载/回退（`model_mount_*`）
-- 约 **3.2 万行 Dart**，`flutter_lints` 全绿
+- 约 **3.2 万行 Dart**，`flutter_lints` 规范
 
 ---
 
@@ -135,7 +137,7 @@
 | 分享 / 保存 | `share_plus` / `image_gallery_saver` | 养成卡分享、图片存相册 |
 | 选择器 | `file_picker` / `image_picker` | 导入聊天记录、选照片 |
 | 路径 | `path_provider` | 模型与参考音频的本地目录 |
-| 规范 | `flutter_lints` + `flutter_test` | 代码规范与测试 |
+| 规范 / 测试 | `flutter_lints` + `flutter_test` | 代码规范与单元测试 |
 
 ---
 
@@ -195,7 +197,7 @@ flutter run
 
 ## 🧠 端侧模型说明
 
-仓库**不包含**端侧模型（体积几百 MB，不适合进 Git）。要让语音功能可用，把模型放到下面两个目录：
+仓库**不包含**端侧模型（体积几百 MB，不适合进 Git）。要让语音功能可用，把模型放到下面两个目录（目录里已附 `README.md` 说明）：
 
 ```text
 web/models/asr/        # 流式语音识别（sherpa-onnx Zipformer 中英双语 INT8）
@@ -205,6 +207,18 @@ web/models/zipvoice/   # 声音克隆（ZipVoice）
 - 模型文件可从 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) 官方 release 获取
 - 目录里已保留 `web/models/presets/`（几个几十 KB 的预设音色样例），方便你直接试听
 - **没有模型时**：语音相关功能不可用，其他功能一切正常
+
+---
+
+## 🧪 测试与 CI
+
+```bash
+flutter analyze          # 静态检查
+flutter test             # 单元测试
+```
+
+- **CI（GitHub Actions）**：每次 push / PR 会校验 `flutter pub get` + **Web 构建通过**（见 [.github/workflows/ci.yml](.github/workflows/ci.yml)）
+- `test/golden_capture_test.dart` 是**界面截图比对**用例（就是 `docs/screenshots/` 的来源），依赖本机字体与平台，**换机器跑会不一致**，不参与 CI
 
 ---
 
