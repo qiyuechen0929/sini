@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="sini">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>似你</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!--
+    系统通知助手：Dart 的 Notification 类型化 API 不暴露 requireInteraction
+    （桌面弹窗停住不自动消失的关键），所以在 JS 侧包一层，Dart 只调这几个函数。
+  -->
+  <script>
+    (function () {
+      window.siniNotify = {
+        get supported() {
+          return typeof window.Notification !== 'undefined';
+        },
+        get permission() {
+          if (typeof window.Notification === 'undefined') return 'denied';
+          return window.Notification.permission || 'default';
+        },
+        get isVisible() {
+          return document.visibilityState === 'visible';
+        }
+      };
+
+      // 申请权限：必须由用户手势触发
+      window.siniNotifyRequest = function () {
+        if (typeof window.Notification === 'undefined') {
+          return Promise.resolve('denied');
+        }
+        try {
+          return Notification.requestPermission();
+        } catch (e) {
+          return Promise.resolve('denied');
+        }
+      };
+
+      // 弹系统通知：标题 / 正文 / 分组 tag / 图标
+      window.siniNotifyShow = function (title, body, tag, icon) {
+        if (typeof window.Notification === 'undefined') return false;
+        if (Notification.permission !== 'granted') return false;
+        try {
+          var n = new Notification(title, {
+            body: body,
+            tag: tag || 'sini-proactive',
+            icon: icon || 'icons/Icon-192.png',
+            badge: icon || 'icons/Icon-192.png',
+            // 关键：让通知在桌面 / 锁屏上停住，不自动消失
+            requireInteraction: true,
+            silent: false
+          });
+          n.onclick = function () {
+            try { window.focus(); n.close(); } catch (e) {}
+          };
+          return true;
+        } catch (e) {
+          return false;
+        }
+      };
+    })();
+  </script>
+</head>
+<body>
+  <!--
+    关闭 Flutter Service Worker：默认情况下 flutter_bootstrap.js 会注册
+    flutter_service_worker.js 并缓存所有 JS / assets，导致改完代码刷新看不到效果。
+    这里在它加载前拦截 navigator.serviceWorker.register，让 Flutter 以为注册成功了，
+    但实际上不注册任何 SW —— 这样每次刷新都拿服务器最新产物。
+  -->
+  <script>
+    (function () {
+      try {
+        if ('serviceWorker' in navigator) {
+          var realRegister = navigator.serviceWorker.register.bind(navigator.serviceWorker);
+          navigator.serviceWorker.register = function () {
+            console.log('[sini] service worker registration skipped (dev mode)');
+            return Promise.resolve({ scope: '/' });
+          };
+        }
+      } catch (e) { /* 忽略 */ }
+    })();
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

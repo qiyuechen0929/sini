@@ -1,0 +1,73 @@
+# ===== 系统 / 编辑器 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.history
+.atom/
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/*
+!.vscode/launch.json
+
+# ===== Flutter / Dart =====
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter_tool_state
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+app.*.symbols
+app.*.map.json
+.widget_preview/
+
+# ===== Android 构建产物 =====
+/android/app/debug
+/android/app/profile
+/android/app/release
+/android/build/
+/android/.gradle/
+.gradle/
+.cxx/
+
+# ===== 日志 / 临时产物 =====
+*.log
+*.bak
+output/
+_build_apk/
+*.apk
+*.apk.sha256
+*.pyc
+__pycache__/
+analyze_out.txt
+sheet_test.log
+
+# ===== 端侧大模型（几百 MB，不进仓库）=====
+# 需要语音功能时自行下载，见 README「端侧模型说明」
+web/models/asr/
+web/models/zipvoice/
+sherpa-onnx-zipvoice-*/
+vocos_24khz.onnx
+
+# ===== 含密钥 / 个人信息的配置（绝对不要提交）=====
+mail_config.json
+github_config.json
+.env
+.env.*
+*.pem
+*.key
+*.sini.json
+
+# ===== 本机用户数据（人格/对话/记忆，隐私）=====
+*.sini.json
+聊天记录*.txt
+诊断报告*.md
+
+# ===== 媒体素材草稿 =====
+ChatGPT Image*.png

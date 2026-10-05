@@ -1,0 +1,52 @@
+name: sini
+description: 似你 - 数字人格聊天前端
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  dio: ^5.7.0
+  shared_preferences: ^2.3.3
+  file_picker: ^12.2.0
+  image_picker: ^1.1.2
+  # 端侧声音克隆：sherpa-onnx（ZipVoice 零样本克隆）。
+  # 同一个包同时支持 web / Android / iOS —— Web 预览能跑，手机端也能跑。
+  sherpa_onnx: ^1.13.7
+  # 音频播放（试听原音 / 播放克隆预览），web + 移动端都支持
+  audioplayers: ^6.1.0
+  # 麦克风采集（语音通话）：手机上没有 AudioWorklet，必须用原生录音。
+  # 它能直接吐 PCM16/16kHz/单声道，正好是 VAD 和 Whisper 要的格式。
+  # 必须用 7.x：5.x 的 federated 插件版本彼此不兼容，AGP9/Dart3.13 编不过。
+  record: ^7.1.1
+  # 拿 App 文档目录：模型文件要从 asset 拷贝出来、克隆的参考音频要存这儿
+  path_provider: ^2.1.6
+  # zip 解包：docx / pptx / xlsx 本质是 zip+XML，附件识别要解开抽正文
+  archive: ^4.0.0
+  # 原生图表渲染：AI 回复里的 ```chart 数据块画成柱状/折线/饼图
+  fl_chart: ^0.69.0
+  # 系统分享：卡片图片 / 养成包分享到微信、QQ、朋友圈等（Web 走 Web Share API，退回下载）
+  share_plus: ^13.3.0
+  # 保存图片到手机相册（Web 上没有相册概念，调用会回退下载）
+  image_gallery_saver: ^2.0.3
+  # 对话框语音输入（Android/iOS 系统识别）
+  speech_to_text: ^7.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  # 模型 / 预设音色打进包里，手机端才能读到（asset 会被拷到 App 文档目录再用）。
+  # 注意：这些是几百 MB 的大文件，**不进 git**（已在 .gitignore 里排除），
+  # 打包时不影响，只是换机器/清了缓存要重新下载。
+  assets:
+    - web/models/zipvoice/
+    - web/models/asr/
+    - web/models/presets/

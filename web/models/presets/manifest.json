@@ -1,0 +1,62 @@
+{
+  "_note": "预设音色清单（文档用；运行时以 lib/features/voice/presets.dart 为准）。音频由 edge-tts 生成，再用两遍 loudnorm(I=-18:TP=-1.5:LRA=11) 统一响度，输出 24kHz 单声道 WAV（选 WAV 是因为手机端没有 mp3 解码器，这样两端共用一份素材）。promptText 必须与音频逐字一致。",
+  "_version": 2,
+  "dirs": [],
+  "files": ["bazongzi.wav", "yangguang.wav", "mengmei.wav", "yujie.wav", "wenrou.wav", "chenwen.wav"],
+  "presets": [
+    {
+      "id": "bazongzi",
+      "label": "霸道总裁",
+      "desc": "低沉强势，说一不二",
+      "gender": "male",
+      "file": "bazongzi.wav",
+      "tts": { "voice": "zh-CN-YunjianNeural", "rate": "-6%", "pitch": "-8Hz" },
+      "promptText": "行，这事就这么定了，别再讨论。你要是不服，就拿结果来说话。"
+    },
+    {
+      "id": "yangguang",
+      "label": "阳光男孩",
+      "desc": "明亮爽快，元气满满",
+      "gender": "male",
+      "file": "yangguang.wav",
+      "tts": { "voice": "zh-CN-YunxiNeural", "rate": "+10%", "pitch": "+6Hz" },
+      "promptText": "嘿！今天天气也太好了吧！走走走，别宅着了，咱们出去打会儿球，出出汗多痛快！"
+    },
+    {
+      "id": "mengmei",
+      "label": "俏皮萌妹",
+      "desc": "软糯娇俏，元气甜甜",
+      "gender": "female",
+      "file": "mengmei.wav",
+      "tts": { "voice": "zh-CN-XiaoyiNeural", "rate": "+6%", "pitch": "+14Hz" },
+      "promptText": "哇，这个蛋糕看着也太好吃了吧！我们一人一半好不好？不行不行，我要大的那半，你让着我嘛。"
+    },
+    {
+      "id": "yujie",
+      "label": "清冷御姐",
+      "desc": "从容冷静，气场全开",
+      "gender": "female",
+      "file": "yujie.wav",
+      "tts": { "voice": "zh-CN-XiaoxiaoNeural", "rate": "-12%", "pitch": "-8Hz" },
+      "promptText": "你不用急着解释。我听的不是你说什么，而是你做什么。想清楚了，再来找我。"
+    },
+    {
+      "id": "wenrou",
+      "label": "温柔女声",
+      "desc": "轻声细语，暖心体贴",
+      "gender": "female",
+      "file": "wenrou.wav",
+      "tts": { "voice": "zh-CN-XiaoxiaoNeural", "rate": "-3%", "pitch": "+3Hz" },
+      "promptText": "今天辛苦啦，我给你煮了点汤，趁热喝。工作再忙，也要记得好好吃饭，好好照顾自己。"
+    },
+    {
+      "id": "chenwen",
+      "label": "沉稳青年",
+      "desc": "平和可靠，娓娓道来",
+      "gender": "male",
+      "file": "chenwen.wav",
+      "tts": { "voice": "zh-CN-YunyangNeural", "rate": "-6%", "pitch": "-2Hz" },
+      "promptText": "人生就像一场旅行，重要的不是目的地，而是沿途的风景。慢一点也没关系，我们总会到的。"
+    }
+  ]
+}
