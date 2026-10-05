@@ -49,9 +49,12 @@ analyze_out.txt
 sheet_test.log
 
 # ===== 端侧大模型（几百 MB，不进仓库）=====
-# 需要语音功能时自行下载，见 README「端侧模型说明」
-web/models/asr/
-web/models/zipvoice/
+# 只忽略模型文件本身，保留目录与目录内的 README（pubspec 里声明了这些 asset 目录，
+# 目录必须存在，否则 flutter build 会报 "unable to find directory entry"）
+web/models/asr/*
+!web/models/asr/README.md
+web/models/zipvoice/*
+!web/models/zipvoice/README.md
 sherpa-onnx-zipvoice-*/
 vocos_24khz.onnx
 
@@ -65,7 +68,6 @@ github_config.json
 *.sini.json
 
 # ===== 本机用户数据（人格/对话/记忆，隐私）=====
-*.sini.json
 聊天记录*.txt
 诊断报告*.md
 
